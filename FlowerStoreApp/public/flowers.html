@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flowers</title>
+    <script src="scripts/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>CRUD Operations using Ajax jQuery</h1>
+    <hr />
+    <form action="/api/flowers" method="POST">
+        <table>
+            <tr>
+                <td><label>FID</label></td>
+                <td><input type="text" name="fid" id="fid" required /></td>
+            </tr>
+            <tr>
+                <td><label>Title</label></td>
+                <td><input type="text" name="title" id="title" required /></td>
+            </tr>
+            <tr>
+                <td><label>Description</label></td>
+                <td><input type="text" name="dscription" id="dscription" required /></td>
+            </tr>
+            <tr>
+                <td><label>Quantity</label></td>
+                <td><input type="text" name="quantity" id="quantity" required /></td>
+            </tr>
+            <tr>
+                <td><label>Unit Price</label></td>
+                <td><input type="text" name="unitprice" id="unitprice" required /></td>
+            </tr>
+
+            <tr>
+                <td> </td>
+                <td><input type="button" id="btninsert" name="btninsert" value="InsertFlower" /></td>
+                <td><input type="button" id="btnUpdate" name="btnUpdate" value="UpdateFlower" /></td>
+            </tr>
+            <tr>
+                <td><input type="button" id="btndelete" name="btndelete" value="DeleteFlower" /></td>
+            </tr>
+
+            <tr>
+                <td><input type="button" id="btnRead" name="btnRead" value="ReadAllFlower" /></td>
+
+            </tr>
+        </table>
+    </form>
+    <script>
+        $(document).ready(function () {
+            var url = "http://localhost:7876/api/flowers";
+            $("#btninsert").click(function () {
+
+                var fid = $('#fid').val();
+                var title = $('#title').val();
+                var dscription = $('#dscription').val();
+                var quantity = $('#quantity').val();
+                var unitprice = $('#unitprice').val();
+
+                var newFlower = {
+                    "fid": fid,
+                    "title": title,
+                    "dscription": dscription,
+                    "quantity": quantity,
+                    "unitprice": unitprice,
+                };
+                console.log(newFlower);
+                $.ajax({
+                    url: url,  // url of rest api
+                    type: 'POST',// request type of rest api
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(newFlower), // data to be sent through request body
+                    success: function (result) {
+                        console.log("new flowers is posted to server ");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+
+            /*************************************************************/
+
+            $("#btnUpdate").click(function () {
+
+                var fid = $('#fid').val();
+                var title = $('#title').val();
+                var dscription = $('#dscription').val();
+                var quantity = $('#quantity').val();
+                var unitprice = $('#unitprice').val();
+
+                var theFlower = {
+                    "fid": fid,
+                    "title": title,
+                    "dscription": dscription,
+                    "quantity": quantity,
+                    "unitprice": unitprice,
+                };
+                console.log(theFlower);
+
+                let url = "/api/flowers/" + theFlower.fid;
+
+                $.ajax({
+                    url: url,
+                    type: 'PUT',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(theFlower),
+                    success: function (result) {
+                        console.log("flower is updated to server ");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+            /*********************************************************************/
+
+            $("#btnRead").click(function () {
+                //R operation :Read Operation
+                $.ajax({
+                    url: "http://localhost:7876/api/flowers",
+                    type: 'GET',
+                    success: function (result) {
+                        console.log(result);
+                        console.log("The flowers are read from server");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+
+            /**************************************************************************/
+
+            //    $("#btnReadFlowersById").click(function () {
+
+            //         var id = $("#txtflowerFid").val();
+            //         console.log("fetching Flowers from external API");
+            //         $.ajax({
+            //             url: "/api/flowers/" + fid,
+            //             type: 'GET',
+            //             success: function (flower) {
+            //                 console.log(flower);
+            //                 console.log("the Flowers are read from server");
+            //                 var strFlowers = flower.toString();
+            //                 flowers = JSON.parse(strFlowers);
+
+
+            //                 $("#ptitle").text(flowers.title);
+            //                 $("#pdescription").text(flowers.dscription);
+            //                 $("#pquantity").text(flowers.quantity);
+            //                 $("#punitprice").text(flowers.unitprice);
+            //                // $("#imgFlower").attr("src", flowers.imagerul);
+
+            //             },
+            //             error: function (err) {
+            //                 console.log(err);
+            //             }
+
+            //         });
+            //     });
+
+            /****************************************************************************/
+
+            $("#btndelete").click(function () {
+
+                // used to delete customer from server
+                //D operation: Delete operation
+                $.ajax({
+                    url: "http://localhost:7876/api/flowers/5",
+                    //url: url+"/9",
+                    type: 'DELETE',
+                    success: function (result) {
+                        console.log("the flower is deleted from server");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
